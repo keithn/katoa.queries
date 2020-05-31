@@ -2,7 +2,7 @@
 
 Katoa Queries is a simple NuGet package for quickly loading SQL queries from embedded resources.
 
-Why load queries from embedded resources? This allows you to avoid embedding all your sql as strings in your dotnet code.  Also many IDEs also make it realtively easy to connect .sql files to databases and allowing auto complete and the ability to test queries interactively.  
+Why load queries from embedded resources? This allows you to avoid embedding all your sql as strings in your dotnet code.  Also many IDEs also make it realtively easy to connect .sql files to databases which allows auto complete and the ability to test queries interactively.  
 
 ## Installing
 
