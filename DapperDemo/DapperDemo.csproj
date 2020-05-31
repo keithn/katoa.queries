@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Dapper" Version="2.0.35" />
+      <PackageReference Include="Microsoft.Data.Sqlite" Version="3.1.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Katoa.Queries\Katoa.Queries.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Queries\Demo.sql" />
+      <EmbeddedResource Include="Queries\AllData.sql" />
+      <None Remove="Queries\CreateDemoData.sql" />
+      <EmbeddedResource Include="Queries\CreateDemoData.sql" />
+      <None Remove="Queries\DataLike.sql" />
+      <EmbeddedResource Include="Queries\DataLike.sql" />
+    </ItemGroup>
+
+</Project>
