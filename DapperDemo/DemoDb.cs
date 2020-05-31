@@ -14,7 +14,6 @@ namespace DapperDemo
         private string _dbPath = "./demo.sqlite";
         private SqliteConnection _connection;
 
-
         public void Open()
         {
             if(File.Exists(_dbPath)) File.Delete(_dbPath);
