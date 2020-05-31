@@ -3,6 +3,15 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <RootNamespace>Katoa.Queries</RootNamespace>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Title>Katoa Queries</Title>
+        <Description>Simple package for loading SQL queries from Embedded Resources</Description>
+        <PackageProjectUrl>https://github.com/keithn/katoa.queries</PackageProjectUrl>
+        <PackageLicense>https://github.com/keithn/katoa.queries/blob/master/LICENSE</PackageLicense>
+        <RepositoryUrl>https://github.com/keithn/katoa.queries</RepositoryUrl>
+        <RepositoryType>Git</RepositoryType>
+        <PackageTags>Utility,SQL,Dapper</PackageTags>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
     </PropertyGroup>
 
 </Project>
