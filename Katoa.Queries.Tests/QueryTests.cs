@@ -23,7 +23,7 @@ namespace Katoa.Queries.Tests
         [Fact]
         void TestThrowIfQueryDoesNotExist()
         {
-            Assert.Throws(typeof(Exception), () => Query.For("IDoNotExist"));
+            Assert.Throws<Exception>(() => Query.For("IDoNotExist"));
         }
     }
 }

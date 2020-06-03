@@ -15,24 +15,29 @@ namespace Katoa.Queries
         private static void LoadEmbeddedQueries(Assembly callingAssembly)
         {
             if (IsLoaded) return;
-            var assembly = callingAssembly;
-            var resources = assembly.GetManifestResourceNames();
-            var queryNamespacePrefix = $"{assembly.GetName().Name}.{QueryFolder}.";
-            
-            var queries = resources.Where(q => q.StartsWith(queryNamespacePrefix)).ToList();
-            queries.ForEach(q =>
+            lock (Queries)
             {
-                using (var stream = assembly.GetManifestResourceStream(q))
+                var assembly = callingAssembly;
+                var resources = assembly.GetManifestResourceNames();
+                var queryNamespacePrefix = $"{assembly.GetName().Name}.{QueryFolder}.";
+                var queries = resources.Where(q => q.StartsWith(queryNamespacePrefix)).ToList();
+                queries.ForEach(q =>
                 {
-                    if (stream == null) return;
-                    using (var reader = new StreamReader(stream))
+                    using (var stream = assembly.GetManifestResourceStream(q))
                     {
-                        Queries.Add(q.Replace(queryNamespacePrefix, "").Replace(".sql", ""),
-                            FilterForQuery(reader.ReadToEnd()));
+                        if (stream == null) return;
+                        using (var reader = new StreamReader(stream))
+                        {
+                            var name = q.Replace(queryNamespacePrefix, "").Replace(".sql", "");
+                            if (!Queries.ContainsKey(name))
+                            {
+                                Queries.Add(name, FilterForQuery(reader.ReadToEnd()));
+                            }
+                        }
                     }
-                }
-            });
-            IsLoaded = true;
+                });
+                IsLoaded = true;
+            }
         }
         // Allow SQL files to have a option header section where test parameters can be declared for the query parameters
         // The Real Query must start after the SQL comment  -- QUERY
