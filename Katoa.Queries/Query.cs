@@ -9,15 +9,18 @@ namespace Katoa.Queries
     public class Query
     {
         public static string QueryFolder = "Queries";
-        public static bool IsLoaded { get; set; } = false;
+        public static HashSet<string> AssembliesLoaded = new HashSet<string>();
         private static Dictionary<string, string> Queries { get; set; } = new Dictionary<string, string>();
 
-        private static void LoadEmbeddedQueries(Assembly callingAssembly)
+        public static bool IsLoaded(Assembly assembly) => AssembliesLoaded.Contains(assembly.GetName().Name);
+
+        private static void LoadEmbeddedQueries(Assembly assembly)
         {
-            if (IsLoaded) return;
+            if (IsLoaded(assembly)) return;
             lock (Queries)
             {
-                var assembly = callingAssembly;
+                // recheck inside the lock, this way, normally we avoid the lock, but in the initial case we will avoid race conditions
+                if (IsLoaded(assembly)) return;
                 var resources = assembly.GetManifestResourceNames();
                 var queryNamespacePrefix = $"{assembly.GetName().Name}.{QueryFolder}.";
                 var queries = resources.Where(q => q.StartsWith(queryNamespacePrefix)).ToList();
@@ -36,9 +39,10 @@ namespace Katoa.Queries
                         }
                     }
                 });
-                IsLoaded = true;
+                AssembliesLoaded.Add(assembly.GetName().Name);
             }
         }
+
         // Allow SQL files to have a option header section where test parameters can be declared for the query parameters
         // The Real Query must start after the SQL comment  -- QUERY
         private static string FilterForQuery(string sql)
@@ -48,11 +52,12 @@ namespace Katoa.Queries
             foreach (var l in lines)
             {
                 result += l + "\r\n";
-                if (l.Replace(" ","").Contains("--QUERY"))
+                if (l.Replace(" ", "").Contains("--QUERY"))
                 {
                     result = "";
                 }
             }
+
             return result;
         }
 
@@ -62,10 +67,11 @@ namespace Katoa.Queries
             LoadEmbeddedQueries(callingAssembly);
             if (!Queries.ContainsKey(query))
             {
-                throw new Exception($"Query named {query} not found in assembly {callingAssembly.GetName().Name} in Folder {QueryFolder}.  Most likely causes are the name has a typo or the query has not been marked as an embedded resource");
+                throw new Exception(
+                    $"Query named {query} not found in assembly {callingAssembly.GetName().Name} in Folder {QueryFolder}.  Most likely causes are the name has a typo or the query has not been marked as an embedded resource");
             }
+
             return Queries[query];
         }
-
     }
 }

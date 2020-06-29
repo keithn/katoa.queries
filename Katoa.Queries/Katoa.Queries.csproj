@@ -12,8 +12,8 @@
         <RepositoryType>Git</RepositoryType>
         <PackageTags>Utility,SQL,Dapper</PackageTags>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageVersion>1.0.3</PackageVersion>
-        <AssemblyVersion>1.0.3</AssemblyVersion>
+        <PackageVersion>1.0.4</PackageVersion>
+        <AssemblyVersion>1.0.4</AssemblyVersion>
     </PropertyGroup>
 
 </Project>
